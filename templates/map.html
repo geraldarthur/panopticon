@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block style %}
+    <style type="text/css">
+        #map {
+            width:100%;
+        }
+    </style>
+{% endblock %}
+
+
+{% block content %}
+    <div id='map' class='dark'></div>
+{% endblock %}
+
+{% block script %}
+<script type='text/javascript'>
+    $('#map').css('height', $(window).height());
+    map = L.mapbox.map('map', 'examples.map-y7l23tes', {
+        detectRetina: true,
+        retinaVersion: 'examples.map-zswgei2n'
+    }).setView([38.8786667466, -77.0373737616], 12);
+    var markerLayer = L.mapbox.markerLayer().loadURL('geojson/?q={"date":"20130831"}').addTo(map);
+    $(window).resize(function() {
+        map.invalidateSize();
+    });
+</script>
+{% endblock %}
