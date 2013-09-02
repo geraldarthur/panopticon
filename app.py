@@ -13,9 +13,12 @@ db = client.apps
 panopticon = db.panopticon
 
 
-@app.route('/panopticon/')
-def index():
-    return render_template('map.html')
+@app.route('/panopticon/<int:date>/')
+def index(date=20130901):
+    from flask import request
+    context = {}
+    context['date'] = date
+    return render_template('map.html', **context)
 
 
 @app.route('/panopticon/<format>/')
@@ -48,6 +51,25 @@ def raw_find(format="raw"):
                 segments = day.get('segments', None)
                 if segments:
                     for segment in segments:
+                        place = segment.get('place', None)
+                        if place:
+                            place_dict = {}
+                            place_dict['properties'] = {}
+                            place_dict['geometry'] = {}
+                            place_dict['type'] = "Feature"
+                            place_dict['geometry']['type'] = "Point"
+                            place_dict['geometry']['coordinates'] = [place['location']['lon'], place['location']['lat']]
+                            place_dict['properties'] = {
+                                "marker-shape": "pin",
+                                "marker-size": "small",
+                                "marker-symbol": "circle-stroked",
+                                "marker-color": "#ace",
+                                "title": place['name'],
+                                "description": place['type']
+                            }
+                            place_dict['properties']['name'] = place['name']
+                            place_dict['properties']['type'] = place['type']
+                            response['features'].append(place_dict)
                         activities = segment.get('activities', None)
                         if activities:
                             for activity in activities:
@@ -62,6 +84,7 @@ def raw_find(format="raw"):
                                     for point in track_points:
                                         line_dict['geometry']['coordinates'].append([point['lon'], point['lat']])
                                         response['features'].append(line_dict)
+                                    line_dict['properties']['type'] = activity['activity']
 
     return json.dumps(response)
 

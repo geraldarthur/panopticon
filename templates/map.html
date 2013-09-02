@@ -20,7 +20,7 @@
         detectRetina: true,
         retinaVersion: 'examples.map-zswgei2n'
     }).setView([38.8786667466, -77.0373737616], 12);
-    var markerLayer = L.mapbox.markerLayer().loadURL('geojson/?q={"date":"20130831"}').addTo(map);
+    var markerLayer = L.mapbox.markerLayer().loadURL('/panopticon/geojson/?q={"date":{ "$gte":"{{ date }}"}}').addTo(map);
     $(window).resize(function() {
         map.invalidateSize();
     });
