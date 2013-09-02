@@ -5,6 +5,7 @@ The Panopticon will read files from your Moves.app JSON export, load them into a
 ## Requirements
 * You have a Mongo DB instance running on the standard port.
 * You have a database named ```apps```.
+* You have a working Python and Virtualenv rig running, viz: http://blog.apps.npr.org/2013/06/06/how-to-setup-a-developers-environment.html.
 
 ## Bootstrap
 * Clone the project and setup your virtualenv.
